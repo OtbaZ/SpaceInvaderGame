@@ -19,8 +19,11 @@ public abstract class Constants {
     //Position intiale du vaisseau 
 
     public final static int X_POS_INIT_VAISSEAU = (LARGEUR_FENETRE)/2; //POUR POSITIONNER LE VAISSEAU AU MILIEU DE LA FENETRE
+    public final static int Y_POS_VAISSEAU = 490;
 
-    //Dimensions du vaisseau 
+    //Unité de déplacement du vaisseau 
+
+    public final static int DX_VAISSEAU = 1;
 
 
 }
