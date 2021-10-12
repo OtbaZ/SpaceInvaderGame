@@ -2,6 +2,7 @@ package game;
 
 import javax.swing.JPanel;
 
+import entities.GroupAlien;
 import entities.Vaisseau;
 import ressources.Chrono;
 import ressources.Constants;
@@ -11,6 +12,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.ImageObserver;
 import java.awt.Graphics2D;
+import entities.Alien;
 
 public class Scene extends JPanel{
 
@@ -18,6 +20,7 @@ public class Scene extends JPanel{
 
     private Vaisseau vaisseau;
 
+    private  Alien [][]  aliens;
 
     /******Constructors*******/
 
@@ -25,6 +28,8 @@ public class Scene extends JPanel{
         super();
 
         this.vaisseau = new Vaisseau();
+
+        this.aliens = new GroupAlien().getAliens();;
 
         //Instanciation du clavier 
         this.setFocusable(true);
@@ -56,6 +61,13 @@ public class Scene extends JPanel{
         g2.fillRect(30, 530, 535, 5);
 
         g2.drawImage(vaisseau.getImg(), vaisseau.getXpos(), vaisseau.getYpos(), null);
+
+        for(int i=0, nbRow=aliens.length;i<nbRow;i++){
+            for(int j=0,nbColumn = aliens[1].length;j<nbColumn;j++){
+                Alien alien = aliens[i][j];
+                g2.drawImage(alien.getImg(), alien.getXpos(), alien.getYpos(), null);
+            }
+        }
     }
     
 
