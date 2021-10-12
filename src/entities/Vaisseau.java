@@ -17,7 +17,7 @@ public class Vaisseau extends Entity{
          super.ypos =Constants.Y_POS_VAISSEAU;
          super.largeur = Constants.LARGEUR_VAISSEAU;
          super.hauteur = Constants.HAUTEUR_VAISSEAU;
-         super.dx = Constants.DX_VAISSEAU;
+         super.dx = 0;
          super.dy = 0; 
          super.strImg1 = "../img/vaisseau.png";
          super.strImg2 = "../img/vaisseauDetruit1.png";
@@ -32,11 +32,18 @@ public class Vaisseau extends Entity{
          
     }
  
- 
-     
- 
- 
      /******Methods******/
- 
+     
+     public void deplacementVaisseau(int dx){
+         this.dx= dx;
+         if(this.dx>0 && xpos < Constants.LIMITE_DROITE_VAISSEAU){
+             this.xpos = this.xpos+this.dx;
+         }
+         
+         if(this.dx<0 && xpos > Constants.LIMITE_GAUCHE_VAISSEAU ){
+             this.xpos = this.xpos+this.dx;
+         }
+
+     }
     
 }

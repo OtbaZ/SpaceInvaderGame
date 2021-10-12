@@ -3,7 +3,9 @@ package game;
 import javax.swing.JPanel;
 
 import entities.Vaisseau;
+import ressources.Chrono;
 import ressources.Constants;
+import ressources.Keyboard;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,7 +26,19 @@ public class Scene extends JPanel{
 
         this.vaisseau = new Vaisseau();
 
+        //Instanciation du clavier 
+        this.setFocusable(true);
+      
+        this.requestFocusInWindow();
+       
+        this.addKeyListener(new Keyboard(this));
+
+        Thread chronoThread = new Thread(new Chrono());
+
+        chronoThread.start();
+
     }
+    
 
 
     /******Methods******/
@@ -44,4 +58,13 @@ public class Scene extends JPanel{
         g2.drawImage(vaisseau.getImg(), vaisseau.getXpos(), vaisseau.getYpos(), null);
     }
     
+
+    public Vaisseau getVaisseau(){
+        return this.vaisseau;
+    }
+
+    public void setVaisseau(Vaisseau vaisseau){
+        this.vaisseau = vaisseau;
+    }
+
 }
