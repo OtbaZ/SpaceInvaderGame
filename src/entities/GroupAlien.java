@@ -4,12 +4,22 @@ import ressources.Constants;
 
 public class GroupAlien {
 
+    enum State {
+        RIGHT,
+        BOTTOM,
+        LEFT
+      }
+      
+
+    private State actualState;
     /****** Variables ******/
     private Alien[][] aliens;
 
     /****** Constructors *******/
 
     public GroupAlien() {
+
+        actualState=State.RIGHT;
 
         aliens = new Alien[5][10];
 
@@ -39,11 +49,12 @@ public class GroupAlien {
         }
     }
 
+
     public void moveAlienButtom(){
         for(int i=0, nbRow=aliens.length; i<nbRow; i++){
-            for(int j=0, nbColumn=aliens.length;j<nbColumn;j++){
+            for(int j=0, nbColumn=aliens[1].length;j<nbColumn;j++){
                 if(aliens[i][j].vivant){
-                    aliens[i][j].ypos = aliens[i][j].ypos-5;
+                    aliens[i][j].ypos = aliens[i][j].ypos+Constants.DY_ALIEN;
                 }
             }
         }
@@ -51,9 +62,9 @@ public class GroupAlien {
 
     public void moveAlienRight(){
         for(int i=0, nbRow=aliens.length; i<nbRow; i++){
-            for(int j=0, nbColumn=aliens.length;j<nbColumn;j++){
+            for(int j=0, nbColumn=aliens[1].length;j<nbColumn;j++){
                 if(aliens[i][j].vivant){
-                    aliens[i][j].xpos = aliens[i][j].xpos+5;
+                    aliens[i][j].xpos = aliens[i][j].xpos+Constants.DX_ALIEN;
                 }
             }
         }
@@ -61,15 +72,95 @@ public class GroupAlien {
 
     public void moveAlienLeft(){
         for(int i=0, nbRow=aliens.length; i<nbRow; i++){
-            for(int j=0, nbColumn=aliens.length;j<nbColumn;j++){
+            for(int j=0, nbColumn=aliens[1].length;j<nbColumn;j++){
                 if(aliens[i][j].vivant){
-                    aliens[i][j].xpos = aliens[i][j].xpos-5;
+                    aliens[i][j].xpos = aliens[i][j].xpos-Constants.DX_ALIEN;
                 }
             }
         }
     }
 
+    public void moveAlien(){
+        if(allAliensAlive() && !reachBottomLimit()){
+            switch(this.actualState){
+                case RIGHT:
+                    if(reachRightLimit()){
+                        this.actualState=State.BOTTOM;
+                    }
+                    else{
+                        moveAlienRight();
+                    }
+                    break;
+    
+                case LEFT:
+                    if(reachLeftLimit()){
+                        this.actualState=State.BOTTOM;
+                    }
+                    else{
+                        moveAlienLeft();
+                    }
+                    break;
+    
+                case BOTTOM:
+                    moveAlienButtom();
+                    if(reachRightLimit()){
+                        this.actualState=State.LEFT;
+                    }
+                    else{
+                        this.actualState=State.RIGHT;
+                    }
+                    break;
+                default :
+                    break;
+            }    
+        }
+    }
 
+
+    public boolean reachRightLimit(){
+        for(int i=0, nbRow=aliens.length; i<nbRow; i++){
+            for(int j=0, nbColumn=aliens[1].length;j<nbColumn;j++){
+                if(aliens[i][j].vivant && aliens[i][j].xpos+Constants.DX_ALIEN>Constants.LIMITE_DROITE_VAISSEAU){
+                    return true;
+              }
+            }
+        }
+        return false;
+    }
+
+
+    public boolean reachLeftLimit(){
+        for(int i=0, nbRow=aliens.length; i<nbRow; i++){
+            for(int j=0, nbColumn=aliens[1].length;j<nbColumn;j++){
+                if(aliens[i][j].vivant && aliens[i][j].xpos-Constants.DX_ALIEN<Constants.LIMITE_GAUCHE_VAISSEAU){
+                    return true;
+              }
+            }
+        }
+        return false;
+    }
+
+    public boolean reachBottomLimit(){
+        for(int i=0, nbRow=aliens.length; i<nbRow; i++){
+            for(int j=0, nbColumn=aliens[1].length;j<nbColumn;j++){
+                if(aliens[i][j].vivant && aliens[i][j].ypos+Constants.DY_ALIEN>Constants.Y_POS_VAISSEAU){
+                    return true;
+              }
+            }
+        }
+        return false;
+    }
+
+    public boolean allAliensAlive(){
+        for(int i=0, nbRow=aliens.length; i<nbRow; i++){
+            for(int j=0, nbColumn=aliens[1].length;j<nbColumn;j++){
+                if(!aliens[i][j].vivant){
+                    return false;
+                }
+            }
+        }
+        return true; 
+    }
 
 
     public Alien [][] getAliens(){

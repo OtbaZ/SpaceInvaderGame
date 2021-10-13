@@ -6,6 +6,7 @@ import entities.GroupAlien;
 import entities.Vaisseau;
 import ressources.Chrono;
 import ressources.Constants;
+import ressources.DeplacementAlien;
 import ressources.Keyboard;
 
 import java.awt.Color;
@@ -20,6 +21,8 @@ public class Scene extends JPanel{
 
     private Vaisseau vaisseau;
 
+    private GroupAlien groupAlien;
+
     private  Alien [][]  aliens;
 
     /******Constructors*******/
@@ -29,7 +32,9 @@ public class Scene extends JPanel{
 
         this.vaisseau = new Vaisseau();
 
-        this.aliens = new GroupAlien().getAliens();;
+        this.groupAlien = new GroupAlien();
+
+        this.aliens = this.groupAlien.getAliens();
 
         //Instanciation du clavier 
         this.setFocusable(true);
@@ -38,9 +43,13 @@ public class Scene extends JPanel{
        
         this.addKeyListener(new Keyboard(this));
 
-        Thread chronoThread = new Thread(new Chrono());
+        Thread chronoThread = new Thread(new Chrono(this));
 
         chronoThread.start();
+
+        Thread alienDeplacementThread = new Thread(new DeplacementAlien(this)); 
+
+        alienDeplacementThread.start();
 
     }
     
@@ -48,7 +57,7 @@ public class Scene extends JPanel{
 
     /******Methods******/
 
-    public void paintComponent(Graphics g){  //Permet de gérer le graphique sur le panneau donc sur ce pannel.
+    public synchronized void paintComponent(Graphics g){  //Permet de gérer le graphique sur le panneau donc sur ce pannel.
         super.paintComponent(g);
         Graphics g2 = (Graphics2D) g;
 
@@ -77,6 +86,10 @@ public class Scene extends JPanel{
 
     public void setVaisseau(Vaisseau vaisseau){
         this.vaisseau = vaisseau;
+    }
+
+    public GroupAlien getGroupAlien(){
+        return this.groupAlien;
     }
 
 }
